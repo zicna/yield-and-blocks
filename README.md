@@ -9,9 +9,9 @@
 ## Calling a method with a block
 
 A block is a bit of code enclosed in `do`/`end` keywords or curly brackets
-(`{}`) We call a method with a block by simply appending the block at the end of
-the method call. We've seen examples of this with Ruby's enumerator methods like
-`#each` and `#collect`:
+(`{}`). We call a method with a block by simply appending the block at the end
+of the method call. We've seen examples of how this is done with Ruby's
+enumerator methods like `#each` and `#collect`:
 
 ```ruby
 ["Tim", "Tom", "Jim"].each do |name|
@@ -24,8 +24,8 @@ called with a block, the code between the `do`/`end` keywords. What's happening
 under the hood here is that `#each` uses a loop to access each element contained
 in our array in turn, passing &mdash; or _yielding_ &mdash; the element to the
 block on each successive step of the iteration. Then inside the block, the value
-of the current element is stored in the `name` placeholder parameter, and then
-written to the screen as part of our greeting.
+of the current element is stored in the `name` placeholder parameter, which
+allows us to write it to the screen as part of our greeting.
 
 Let's take a look at another example. In the below snippet, we're writing a
 method that `puts` out every word in the array that starts with the letter
@@ -115,21 +115,9 @@ accept the argument passed to `yield`:
 yielding_with_arguments(2) {|i| puts i * 3}
 ```
 
-We call our method with an argument:
-
-```ruby
-yielding_with_arguments(2)
-```
-
-and a block:
-
-```ruby
-{ |i| puts i * 3 }
-```
-
 The `|i|` (placeholder variable in between pipes) is our placeholder for the
-`yield`ed value. The `puts i * 3` is the code we actually want to enact with our
-`yield`ed value.
+`yield`ed value so in this case, `i` equals 2. The `puts i * 3` is the code we
+actually want to enact with our `yield`ed value.
 
 So, the above method call will output:
 
@@ -156,7 +144,8 @@ Let's revisit our earlier example of a call to the `#each` method that only
 end
 ```
 
-In this example, we'll be building our own method, `#hello_t`, that will recreate the functionality of `#each`.
+In this example, we'll be building our own method, `#hello_t`, that will
+recreate the functionality of `#each`.
 
 Open up `lib/hello.rb`. We'll be coding the body of the `#hello_t` method here.
 
@@ -198,7 +187,8 @@ In the code above, we set a counter variable, `i`, equal to `0`. We start our
 keywords as long as `i` is _less_ than the length of the array. Inside our
 `while` loop, we increment the value of `i`.
 
-Now, as we iterate through the array, we need to `yield` each member of the array to the block that we'll pass to our `#hello_t` method.
+Now, as we iterate through the array, we need to `yield` each member of the
+array to the block that we'll pass to our `#hello_t` method when we call it.
 
 #### Step 3: Yielding to the block
 
@@ -227,11 +217,8 @@ block. Now we're ready to call our method.
 
 #### Step 4: Calling our method
 
-Let's call our method, passing in the following array as an argument:
-
-```ruby
-["Tim", "Tom", "Jim"]
-```
+Let's call our method with a block, passing in our array of names as an
+argument:
 
 ```ruby
 hello_t(["Tim", "Tom", "Jim"]) do |name|
@@ -309,7 +296,7 @@ hello_t(["Tim", "Tom", "Jim"]) do |name|
 end
 ```
 
-Let's compare it to the original version that uses `#each`:
+and compare it to the original version that uses `#each`:
 
 ```ruby
 ["Tim", "Tom", "Jim"].each do |name|
@@ -320,8 +307,9 @@ end
 ```
 
 Note that we are doing the exact same thing in both cases; the only difference
-is which method we call. We now know that Ruby's `#each` method is using a loop
-to access each element of our array and yield it to whatever block we give it.
+is which method we call. Just like our version, Ruby's `#each` method uses a
+loop to access each element of an array and yield it to whatever block we give
+it, then returns the original array at the end.
 
 ### Advanced: Defining a method to optionally take a block
 
@@ -359,7 +347,7 @@ end
 Our `#hello_t` method will `yield` each element of the array to the block if a
 block is present. Otherwise, it will `puts` out a helpful phrase.
 
-## Enumerators under the hood
+## Conclusion
 
 You've already worked with enumerator methods like `#each` and `#collect`. These
 methods are called on collections, such as arrays. They take blocks as their
