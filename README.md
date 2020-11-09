@@ -8,9 +8,7 @@
 
 ## Calling a method with a block
 
-A block is a bit of code enclosed in `do`/`end` keywords or curly brackets (`{}`). We've seen methods like `#each` and `#collect` being called with blocks.
-
-Let's take a look at the following example:
+A block is a bit of code enclosed in `do`/`end` keywords or curly brackets (`{}`) We call a method with a block by simply appending the block at the end of the method call. We've seen examples of this with Ruby's enumerator methods like `#each` and `#collect`:
 
 ```ruby
 ["Tim", "Tom", "Jim"].each do |name|
@@ -18,7 +16,7 @@ Let's take a look at the following example:
 end
 ```
 
-Here we are calling `#each` on our array of names. The `#each` method is being called with a block, the code between the `do`/`end` keywords. Each element contained in our array is getting passed, or yielded, to the block on each successive step of the iteration.
+Here we are calling `#each` on our array of names. The `#each` method is being called with a block, the code between the `do`/`end` keywords. What's happening under the hood here is that `#each` uses a loop to access each element contained in our array in turn, passing &mdash; or _yielding_ &mdash; the element to the block on each successive step of the iteration. Then inside the block, the value of the current element is stored in the `name` placeholder parameter, and then written to the screen as part of our greeting.
 
 Let's take a look at another example. In the below snippet, we're writing a method that `puts` out every word in the array that starts with the letter `"T"`:
 
@@ -50,7 +48,7 @@ def yielding
 end
 ```
 
-To call this method with a block, we use the following syntax:
+To call this method with a block, we use the name of the method and append the block:
 
 ```ruby
 yielding { puts "the method has yielded to the block!" }
@@ -89,7 +87,7 @@ end
 We can call `#yielding_with_arguments` by providing both an argument _and_ a block containing a placeholder, `|i|` in the following example, which will accept the argument passed to `yield`:
 
 ```ruby
-yielding_with_arguments(2) {|i| puts i * 2}
+yielding_with_arguments(2) {|i| puts i * 3}
 ```
 
 We call our method with an argument:
@@ -101,16 +99,16 @@ yielding_with_arguments(2)
 and a block:
 
 ```ruby
-{ |i| puts i * 2 }
+{ |i| puts i * 3 }
 ```
 
-The `|i|` (placeholder variable in between pipes) is our placeholder for the `yield`ed value. The `puts i * 2` is the code we actually want to enact with our `yield`ed value.
+The `|i|` (placeholder variable in between pipes) is our placeholder for the `yield`ed value. The `puts i * 3` is the code we actually want to enact with our `yield`ed value.
 
 So, the above method call will output:
 
 ```bash
 the program is executing the code inside the method
-4
+6
 now we are back in the method
 ```
 
@@ -128,9 +126,9 @@ Let's revisit our earlier example of a call to the `#each` method that only `put
 end
 ```
 
-In this example, we'll be building our own method, `#hello_t`.
+In this example, we'll be building our own method, `#hello_t`, that will recreate the functionality of `#each`.
 
-Open up `lib/hello.rb`. We'll be coding the body of the `#hello_t` method.
+Open up `lib/hello.rb`. We'll be coding the body of the `#hello_t` method here.
 
 #### Step 1: Defining our method to accept an argument
 
@@ -148,7 +146,7 @@ Great, let's move on.
 
 #### Step 2: Enacting an iteration
 
-We know that we want to yield each element of the array successively to a block that we will call this method with. Let's use a `while` loop to create our iteration:
+We know that we want our method to yield each element of the array successively to a block that we will call this method with. Let's use a `while` loop to create our iteration:
 
 ```ruby
 def hello_t(array)
@@ -210,7 +208,7 @@ Hi, Tom
 
 We're calling our method with the array of names as an argument and accompanying that method call with a block that accepts a `|name|` parameter. If the passed-in name begins with the letter `"T"`, the block will `puts` out a greeting. Good job! Before moving on to Step 5, be sure to remove the above method call from lib/hello.rb.
 
-#### Step 5: Passing our test
+#### Step 5: Passing our tests
 
 Go ahead and run the test suite by typing `learn test` into your terminal in this lesson's directory. You'll see that we are already passing two of the tests but still have two to go. Looking at the first error, we see our test expects us to return the original array, but our method is currently returning `nil`:
 
@@ -246,6 +244,28 @@ end
 ```
 
 Here, we tell our method to return the original array simply by having that array be the last line of the method. Whatever is evaluated last in a method will be the return value for the whole method. If you run the test again, you should now be passing three of the four tests.
+
+Before we move on, let's take another look at our method call:
+
+```ruby
+hello_t(["Tim", "Tom", "Jim"]) do |name|
+  if name.start_with?("T")
+    puts "Hi, #{name}"
+  end
+end
+```
+
+Let's compare it to the original version that uses `#each`:
+
+```ruby
+["Tim", "Tom", "Jim"].each do |name|
+  if name.start_with?("T")
+    puts "Hi, #{name}"
+  end
+end
+```
+
+Note that we are doing the exact same thing in both cases: the only difference is which method we call to iterate through the array and yield each element to the block.
 
 ### Advanced: Defining a method to optionally take a block
 
