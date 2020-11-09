@@ -212,7 +212,7 @@ We're calling our method with the array of names as an argument and accompanying
 
 #### Step 5: Passing our test
 
-Go ahead and run the test suite by typing `learn test` into your terminal in this lesson's directory. You'll see that our test expects us to return the original array, but our method is currently returning `nil`:
+Go ahead and run the test suite by typing `learn test` into your terminal in this lesson's directory. You'll see that we are already passing two of the tests but still have two to go. Looking at the first error, we see our test expects us to return the original array, but our method is currently returning `nil`:
 
 ```
 Failures:
@@ -228,12 +228,6 @@ Failures:
        (compared using ==)
      # ./spec/hello_spec.rb:13:in `block (2 levels) in <top (required)>'
 
-Finished in 0.01509 seconds (files took 0.1233 seconds to load)
-2 examples, 1 failure
-
-Failed examples:
-
-rspec ./spec/hello_spec.rb:12 # #hello_t returns the original array
 ```
 
 How can we fix this? We can tell our `#hello_t` method to return the original array:
@@ -251,13 +245,13 @@ def hello_t(array)
 end
 ```
 
-Here, we tell our method to return the original array simply by having that array be the last line of the method. Whatever is evaluated last in a method will be the return value for the whole method. If you run the test again, you should be passing (although the "test suite," the full collection of tests, is not quite done!).
+Here, we tell our method to return the original array simply by having that array be the last line of the method. Whatever is evaluated last in a method will be the return value for the whole method. If you run the test again, you should now be passing three of the four tests.
 
 ### Advanced: Defining a method to optionally take a block
 
-In the examples above, our methods will break if they are called without an accompanying block. Go ahead and try it — you'll see a `no block given (yield) (LocalJumpError)`. This is bad because we like our code to be flexible and accommodating. In other words, we don't want our code to break so easily and in such an ugly, uncontrolled manner.
+In the examples above, our methods will break if they are called without an accompanying block. You can see this for yourself if you add a method call at the bottom of `hello.rb`, this time without passing a block. If you do that and run `ruby lib/hello.rb`, you'll see a `no block given (yield) (LocalJumpError)`. This is bad because we like our code to be flexible and accommodating. In other words, we don't want our code to break so easily and in such an ugly, uncontrolled manner.
 
-Let's refactor our `#hello_t` method so that it can be called either with or without a block:
+We can fix this (and get our last test to pass) by refactoring our `#hello_t` method so that it can be called either with or without a block:
 
 ```ruby
 def hello_t(array)
